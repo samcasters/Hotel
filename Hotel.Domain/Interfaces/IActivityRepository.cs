@@ -12,6 +12,7 @@ namespace Hotel.Domain.Interfaces
         public void AddActivity(Activity activity);
         //public IReadOnlyList<Activity> GetActivitys(string filter);
         public IReadOnlyList<Activity> GetActivitysByOrganisatorId(int id);
+        public IReadOnlyList<Activity> GetActivitys(string filter);
         public Activity GetActivityById(int id);
         public Activity UpdateActivity(Activity activity);
         public void DeleteActivity(int id);

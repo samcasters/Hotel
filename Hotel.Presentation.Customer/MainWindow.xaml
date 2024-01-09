@@ -5,26 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hotel.Presentation.Customer"
         mc:Ignorable="d"
-        Title="Customer Manager" Height="450" Width="800">
+        Title="Main window" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="197*"/>
+            <ColumnDefinition Width="230*"/>
+            <ColumnDefinition Width="123*"/>
+            <ColumnDefinition Width="68*"/>
+            <ColumnDefinition Width="49*"/>
+            <ColumnDefinition Width="133*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="179*"/>
+            <RowDefinition Height="23*"/>
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" Grid.Column="0" Name="SearchTextBox" Margin="5"/>
-        <Button Grid.Row="0" Grid.Column="1" Name="SearchButton" Margin="5" Content="Search" Click="SearchButton_Click"/>
-        <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Name="CustomerDataGrid" IsReadOnly="true">
+        <TextBox Grid.Row="0" Grid.Column="0" Name="SearchTextBox" Margin="5,5,186,5" Grid.ColumnSpan="2"/>
+        <Button Grid.Row="0" Name="SearchButton" Margin="49,5,77,5" Content="Search" Click="SearchButton_Click" Grid.Column="1"/>
+        <DataGrid Grid.Row="1" Grid.Column="0" Margin="5,5,5,2" Name="MainDataGrid" IsReadOnly="true" Grid.ColumnSpan="6">
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Add" Click="MenuItemAddCustomer_Click"></MenuItem>
-                    <MenuItem Header="Delete" Click="MenuItemDeleteCustomer_Click"></MenuItem>
-                    <MenuItem Header="Update" Click="MenuItemUpdateCustomer_Click"></MenuItem>
+                    <MenuItem Header="Add" ></MenuItem>
+                    <MenuItem Header="Delete" ></MenuItem>
+                    <MenuItem Header="Update" ></MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>
+        <Button Grid.Row="0" x:Name="InformationButton" Margin="7,5,10,5" Content="Information selected" Click="InformationButton_Click" Grid.Column="5"/>
+        <Button Grid.Row="2" x:Name="ActivityButton" Margin="10,10,1,10" Content="Activity" Click="ActivityButton_Click"/>
+        <Button Grid.Row="2" x:Name="OrganisatorButton" Margin="229,10,0,10" Content="Organisator" Click="OrganisatorButton_Click" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <Button Grid.Row="2" x:Name="RegistrationButton" Margin="5,10,10,10" Content="Registration" Click="RegistrationButton_Click" Grid.Column="4" Grid.ColumnSpan="2"/>
+        <Button Grid.Row="2" x:Name="CustomerButton" Margin="4,10,6,10" Content="Customer" Click="CustomerButton_Click" Grid.Column="1"/>
+        <Button Grid.Row="0" x:Name="AddButton" Margin="44,5,0,5" Content="Add" Click="AddButton_Click" Grid.Column="3" Grid.ColumnSpan="2"/>
+        <Button Grid.Row="0" x:Name="UpdateButton" Margin="53,5,34,5" Content="Update Selected" Click="UpdateSelectedButton_Click" Grid.Column="2" Grid.ColumnSpan="2"/>
+        <TextBox Name="CatagoryTextBox" Grid.Column="5" HorizontalAlignment="Left" Height="20" Margin="635,75,0,0" TextWrapping="Wrap" Text="Customer" VerticalAlignment="Top" Width="120" IsEnabled="False" Grid.Row="2"/>
     </Grid>
 </Window>

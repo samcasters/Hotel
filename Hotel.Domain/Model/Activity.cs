@@ -28,9 +28,8 @@ namespace Hotel.Domain.Model
         public float CostChild { get; set; }
         private Organisator _organisator;
         public Organisator Organisator { get; set; }
-        private bool _status;
 
-        public Activity(int id,string name, string description, string place, int durationMin, DateTime timeOfActivity, int availability, float costAdult, float costChild, Organisator organisator, bool status)
+        public Activity(int id,string name, string description, string place, int durationMin, DateTime timeOfActivity, int availability, float costAdult, float costChild, Organisator organisator)
         {
             Id = id;
             Name = name;
@@ -42,10 +41,9 @@ namespace Hotel.Domain.Model
             CostAdult = costAdult;
             CostChild = costChild;
             Organisator = organisator;
-            Status = status;
         }
 
-        public Activity(string name, string description, string place, int durationMin, DateTime timeOfActivity, int availability, float costAdult, float costChild, Organisator organisator, bool status)
+        public Activity(string name, string description, string place, int durationMin, DateTime timeOfActivity, int availability, float costAdult, float costChild, Organisator organisator)
         {
             Name = name;
             Description = description;
@@ -56,10 +54,7 @@ namespace Hotel.Domain.Model
             CostAdult = costAdult;
             CostChild = costChild;
             Organisator = organisator;
-            Status = status;
         }
-
-        public bool Status { get; set; }
 
 
 

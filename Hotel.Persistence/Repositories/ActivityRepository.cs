@@ -63,7 +63,7 @@ namespace Hotel.Persistence.Repositories
         {
             try
             {
-                Activity activity = new Activity(int.MaxValue, "", "", "", -1, DateTime.MaxValue, int.MaxValue, float.MaxValue, float.MaxValue, new Organisator("", new ContactInfo("", "", new Address(""))), false);
+                Activity activity = new Activity(int.MaxValue, "", "", "", -1, DateTime.MaxValue, int.MaxValue, float.MaxValue, float.MaxValue, new Organisator("", new ContactInfo("", "", new Address(""))));
                 string sql = "select act.id, act.name, act.omvating, act.place, act.durationMin, act.timeOfActivatie, act.availability, act.costAdult, act.costChild, act.organisatorId, act.status from Activatie act where id = @id";
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 using (SqlCommand cmd = conn.CreateCommand())
@@ -86,7 +86,7 @@ namespace Hotel.Persistence.Repositories
                             var costChild = (string)reader["costChild"];
                             var organisatorId = (string)reader["organisatorId"];
                             var status = (string)reader["status"];
-                            activity = new Activity(int.Parse(sqlid), name, omvating, place, int.Parse(durationMin), DateTime.Parse(timeOfActivatie), int.Parse(availability), float.Parse(costAdult), float.Parse(costChild), organizationRepository.GetOrganisatorById(int.Parse(organisatorId)), bool.Parse(status));
+                            activity = new Activity(int.Parse(sqlid), name, omvating, place, int.Parse(durationMin), DateTime.Parse(timeOfActivatie), int.Parse(availability), float.Parse(costAdult), float.Parse(costChild), organizationRepository.GetOrganisatorById(int.Parse(organisatorId)));
                         }
                     }
                 }
@@ -143,7 +143,7 @@ namespace Hotel.Persistence.Repositories
                             var costChild = (string)reader["costChild"];
                             var organisatorId = (string)reader["organisatorId"];
                             var status = (string)reader["status"];
-                            Activity activity = new Activity(int.Parse(sqlid), name, omvating, place, int.Parse(durationMin), DateTime.Parse(timeOfActivatie), int.Parse(availability), float.Parse(costAdult), float.Parse(costChild), organizationRepository.GetOrganisatorById(int.Parse(organisatorId)), bool.Parse(status));
+                            Activity activity = new Activity(int.Parse(sqlid), name, omvating, place, int.Parse(durationMin), DateTime.Parse(timeOfActivatie), int.Parse(availability), float.Parse(costAdult), float.Parse(costChild), organizationRepository.GetOrganisatorById(int.Parse(organisatorId)));
                             activitys.Add(activity);
                         }
                     }
@@ -192,6 +192,50 @@ namespace Hotel.Persistence.Repositories
             {
 
                 throw new ActivityRepositoryException("AddActivity", ex);
+            }
+        }
+
+        public IReadOnlyList<Activity> GetActivitys(string filter)
+        {
+            try
+            {
+                List<Activity> activitys = new List<Activity>();
+                string sql = "select act.id, act.name, act.omvating, act.place, act.durationMin, act.timeOfActivatie, act.availability, act.costAdult, act.costChild, act.organisatorId, act.status from Activatie act where status = 1";
+                if (!string.IsNullOrWhiteSpace(filter))
+                {
+                    sql += " and (act.id like @filter or act.name like @filter)";
+                }
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    conn.Open();
+                    cmd.CommandText = sql;
+                    if (!string.IsNullOrWhiteSpace(filter)) cmd.Parameters.AddWithValue("@filter", $"%{filter}%");
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var sqlid = (string)reader["id"];
+                            var name = (string)reader["name"];
+                            var omvating = (string)reader["omvating"];
+                            var place = (string)reader["place"];
+                            var durationMin = (string)reader["durationMin"];
+                            var timeOfActivatie = (string)reader["timeOfActivatie"];
+                            var availability = (string)reader["availability"];
+                            var costAdult = (string)reader["costAdult"];
+                            var costChild = (string)reader["costChild"];
+                            var organisatorId = (string)reader["organisatorId"];
+                            var status = (string)reader["status"];
+                            Activity activity = new Activity(int.Parse(sqlid), name, omvating, place, int.Parse(durationMin), DateTime.Parse(timeOfActivatie), int.Parse(availability), float.Parse(costAdult), float.Parse(costChild), organizationRepository.GetOrganisatorById(int.Parse(organisatorId)));
+                            activitys.Add(activity);
+                        }
+                    }
+                }
+                return activitys;
+            }
+            catch (Exception ex)
+            {
+                throw new ActivityRepositoryException("GetActivitys", ex);
             }
         }
     }

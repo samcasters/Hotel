@@ -1,0 +1,48 @@
+﻿<Window x:Class="Hotel.Presentation.Customer.ActivatieWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Hotel.Presentation.Customer"
+        mc:Ignorable="d"
+            Title="ActivityWindow" Height="225" Width="724">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="87*"/>
+            <ColumnDefinition Width="154*"/>
+            <ColumnDefinition Width="100*"/>
+            <ColumnDefinition Width="139*"/>
+            <ColumnDefinition Width="108*"/>
+            <ColumnDefinition Width="136*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" Content="Id" Margin="5,5,5,5"/>
+        <Label Grid.Row="0" Grid.Column="2" Content="duration min" Margin="5,5,5,5"/>
+        <Label Grid.Row="1" Grid.Column="0" Content="Name" Margin="5,5,5,5"/>
+        <Label Grid.Row="1" Grid.Column="2" Content="availability" Margin="5,5,5,5"/>
+        <Label Grid.Row="2" Grid.Column="0" Content="discription" Margin="5,5,5,5"/>
+        <Label Grid.Row="2" Grid.Column="2" Content="costChild" Margin="5,5,5,5"/>
+        <Label Grid.Row="3" Grid.Column="0" Content="place" Margin="5,5,5,5"/>
+        <Label Grid.Row="3" Grid.Column="2" Content="costAdult" Margin="5,5,5,5"/>
+        <TextBox Grid.Column="1" Name="IdTextBox" Margin="5,0,5,0" VerticalAlignment="Center" Height="18" IsEnabled="False" />
+        <TextBox Grid.Column="3" Name="DurationTextBox" Margin="0,10,0,0" VerticalAlignment="Top" Height="18" />
+        <TextBox Grid.Row="1" Grid.Column="1" Name="NameTextBox" Margin="5,0,5,0" VerticalAlignment="Center" Height="18" />
+        <TextBox Grid.Row="1" Grid.Column="3" Name="AvalibilityTextBox" VerticalAlignment="Center" Height="18" />
+        <TextBox Grid.Row="2" Grid.Column="1" Name="DiscriptionTextBox" Margin="5,0,5,0" VerticalAlignment="Center" Height="18" />
+        <TextBox Grid.Row="2" Grid.Column="3" Name="CostChildTextBox" VerticalAlignment="Center" Height="18" />
+        <TextBox Grid.Row="3" Grid.Column="1" Name="PlaceTextBox" Margin="5,0,5,0" VerticalAlignment="Center" Height="18" />
+        <TextBox Grid.Row="3" Grid.Column="3" Name="CostAdultTextBox" VerticalAlignment="Center" Height="18" />
+        <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" Margin="119,5,70,5" Name="AddButton" Click="AddButton_Click" Content="Add"/>
+        <Label Grid.Row="0" Grid.Column="4" Content="time Of Activity" Margin="5,5,0,5"/>
+        <Label Grid.Row="1" Grid.Column="4" Content="organisatorId" Margin="10,5,18,5"/>
+        <TextBox Grid.Row="1" Grid.Column="5" x:Name="OrganisatorIdTextBox" Margin="0,0,10,0" VerticalAlignment="Center" Height="18" IsEnabled="False"/>
+        <DatePicker Name="TimeOfActivityDatePicker" Grid.Column="5" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" VerticalAlignment="Center" Width="121"/>
+    </Grid>
+</Window>

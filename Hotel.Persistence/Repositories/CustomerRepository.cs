@@ -211,5 +211,65 @@ namespace Hotel.Persistence.Repositories
                 throw new CustomerRepositoryException("UpdateCustomer", ex); 
             }
         }
+
+        public void AddMember(int? CustomerId, string? MemberName, DateTime? memberBurthday)
+        {
+            if(CustomerId == null | MemberName == null | memberBurthday == null) { throw new CustomerRepositoryException("no nulls alouwed in AddMember"); }
+            try
+            {
+                string sql = "INSERT INTO Member(name,birthday,customerid,status) output INSERTED.ID VALUES(@name,@birthday,@customerid,1)";
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    conn.Open();
+                    SqlTransaction sqlTransaction = conn.BeginTransaction();
+                    try
+                    {
+                        cmd.Transaction = sqlTransaction;
+                        cmd.CommandText = sql;
+                        cmd.Parameters.AddWithValue("@name", MemberName);
+                        cmd.Parameters.AddWithValue("@birthday", memberBurthday);
+                        cmd.Parameters.AddWithValue("@customerid", CustomerId);
+                        
+                        int id = (int)cmd.ExecuteScalar();
+                        sqlTransaction.Commit();
+                    }
+                    catch (Exception ex) { sqlTransaction.Rollback(); throw; }
+                }
+            }
+            catch (Exception ex) { throw new CustomerRepositoryException("addcustomer", ex); }
+        }
+
+        public IReadOnlyList<Member> GetMembers(int customerId)
+        {
+            try
+            {
+                List<Member> members = new List<Member>();
+                string sql = "select mem.name,mem.birthday,mem.customerid from Member mem where customerid = @id";
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    conn.Open();
+                    cmd.CommandText = sql;
+                    cmd.Parameters.AddWithValue("@id", customerId);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var name = (string)reader["name"];
+                            var birthday = (string)reader["birthday"];
+                            var customerid = (string)reader["customerid"];
+                            Member member = new Member(name,DateTime.Parse(birthday));
+                           members.Add(member);
+                        }
+                    }
+                }
+                return members;
+            }
+            catch (Exception ex)
+            {
+                throw new CustomerRepositoryException("GetMembers", ex);
+            }
+        }
     }
 }

@@ -92,10 +92,10 @@ namespace Hotel.Persistence.Repositories
             try
             {
                 Dictionary<int, Organisator> organisators = new Dictionary<int, Organisator>();
-                string sql = "select org.name,org.email,org.phone,org.address,org.status from Organisator org where t1.status=1";
+                string sql = "select org.id,org.name,org.email,org.phone,org.address,org.status from Organisator org where status=1";
                 if (!string.IsNullOrWhiteSpace(filter))
                 {
-                    sql += " and (t1.id like @filter or t1.name like @filter or t1.email like @filter)";
+                    sql += " and (org.id like @filter or org.name like @filter or org.email like @filter)";
                 }
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 using (SqlCommand cmd = conn.CreateCommand())

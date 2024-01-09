@@ -24,8 +24,8 @@ namespace Hotel.Persistence.Repositories
         {
             try
             {
-                string sql = "INSERT INTO registration(activatieId,customerId,participating) " +
-                         "output INSERTED.ID VALUES(@activatieId,@customerId,@participating)";
+                string sql = "INSERT INTO registration(activatieId,customerId,participating,status) " +
+                         "output INSERTED.ID VALUES(@activatieId,@customerId,@participating,1)";
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
@@ -55,8 +55,8 @@ namespace Hotel.Persistence.Repositories
         {
             try
             {
-                Registration registration = new Registration(new Activity(int.MaxValue,"","","",int.MaxValue,DateTime.MaxValue,int.MaxValue,float.MaxValue,float.MaxValue,new Organisator(int.MaxValue,"",new ContactInfo("","",new Address(""))),false),new Customer("",new ContactInfo("","",new Address(""))),int.MaxValue);
-                string sql = "select reg.activatieId,reg.customerId,reg.participating from registration reg where id = @id";
+                Registration registration = new Registration(new Activity(int.MaxValue,"","","",int.MaxValue,DateTime.MaxValue,int.MaxValue,float.MaxValue,float.MaxValue,new Organisator(int.MaxValue,"",new ContactInfo("","",new Address("")))),new Customer("",new ContactInfo("","",new Address(""))),int.MaxValue);
+                string sql = "select reg.id,reg.activatieId,reg.customerId,reg.participating from registration reg where id = @id";
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
@@ -67,11 +67,12 @@ namespace Hotel.Persistence.Repositories
                     {
                         while (reader.Read())
                         {
+                            var outputId = (string)reader["id"];
                             var activatieId = (string)reader["activatieId"];
                             var customerId = (string)reader["customerId"];
                             var participating = (string)reader["participating"];
 
-                            registration = new Registration(activityRepository.GetActivityById(int.Parse(activatieId)),customerRepository.GetCustomerById(int.Parse(customerId)),int.Parse(participating));
+                            registration = new Registration(int.Parse(outputId),activityRepository.GetActivityById(int.Parse(activatieId)),customerRepository.GetCustomerById(int.Parse(customerId)),int.Parse(participating));
                         }
                     }
                 }
@@ -87,7 +88,7 @@ namespace Hotel.Persistence.Repositories
             try
             {
                 List<Registration> registrations = new List<Registration>();
-                string sql = "select reg.activatieId,reg.customerId,reg.participating from registration reg where customerId = @id";
+                string sql = "select reg.id,reg.activatieId,reg.customerId,reg.participating from registration reg where customerId = @id";
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
@@ -98,10 +99,11 @@ namespace Hotel.Persistence.Repositories
                     {
                         while (reader.Read())
                         {
+                            var outputId = (string)reader["id"];
                             var activatieId = (string)reader["activatieId"];
                             var customerId = (string)reader["customerId"];
                             var participating = (string)reader["participating"];
-                            Registration registration = new Registration(activityRepository.GetActivityById(int.Parse(activatieId)), customerRepository.GetCustomerById(int.Parse(customerId)), int.Parse(participating));
+                            Registration registration = new Registration(int.Parse(outputId),activityRepository.GetActivityById(int.Parse(activatieId)), customerRepository.GetCustomerById(int.Parse(customerId)), int.Parse(participating));
                             registrations.Add(registration);
                         }
                     }
@@ -117,7 +119,7 @@ namespace Hotel.Persistence.Repositories
         {
             try
             {
-                string sql = "update registration set status=0 where customerid = @id";
+                string sql = "update registration set status=0 where id = @id";
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
@@ -136,7 +138,7 @@ namespace Hotel.Persistence.Repositories
         {
             try
             {
-                string sql = "update registration det activatieId=@activatieId,customerId=@customerId,participating=@participating WHERE activatieId = @activatieId AND customerId = @customerId";
+                string sql = "update registration set activatieId=@activatieId,customerId=@customerId,participating=@participating WHERE activatieId = @activatieId AND customerId = @customerId";
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
@@ -161,6 +163,42 @@ namespace Hotel.Persistence.Repositories
             {
 
                 throw new RegistrationRepositoryException("UpdateRegistration", ex);
+            }
+        }
+
+        public IReadOnlyList<Registration> GetRegistrations(string filter)
+        {
+            try
+            {
+                List<Registration> registrations = new List<Registration>();
+                string sql = "select reg.id,reg.activatieId,reg.customerId,reg.participating from registration reg";
+                if (!string.IsNullOrWhiteSpace(filter))
+                {
+                    sql += " where participating like @filter";
+                }
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    conn.Open();
+                    cmd.CommandText = sql;
+                    if (!string.IsNullOrWhiteSpace(filter)) cmd.Parameters.AddWithValue("@filter", $"%{filter}%");
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var activatieId = (string)reader["activatieId"];
+                            var customerId = (string)reader["customerId"];
+                            var participating = (string)reader["participating"];
+                            Registration registration = new Registration(activityRepository.GetActivityById(int.Parse(activatieId)), customerRepository.GetCustomerById(int.Parse(customerId)), int.Parse(participating));
+                            registrations.Add(registration);
+                        }
+                    }
+                }
+                return registrations;
+            }
+            catch (Exception ex)
+            {
+                throw new RegistrationRepositoryException("GetRegistrations", ex);
             }
         }
     }

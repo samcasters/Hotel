@@ -8,6 +8,8 @@ namespace Hotel.Domain.Model
 {
     public class Registration
     {
+        private int _id;
+        public int Id { get; set; }
         private Activity _activatie; 
         public Activity Activatie { get; set; }
         private Customer _customer;
@@ -22,6 +24,12 @@ namespace Hotel.Domain.Model
             Participating = participating;
         }
 
-        
+        public Registration(int id, Activity activatie, Customer customer, int participating)
+        {
+            Id = id;
+            Activatie = activatie;
+            Customer = customer;
+            Participating = participating;
+        }
     }
 }
